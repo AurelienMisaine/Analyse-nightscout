@@ -1,1 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Analyse Diabète</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Analyse Nightscout 🩸</h1>
+        
+        <div class="config">
+            <input type="text" id="nightscoutUrl" 
+                   value="https://aurelien.misaine.bizis.si" readonly>
+            <input type="password" id="apiToken" 
+                   value="reporter-0554ed1eaf3b1631" readonly>
+            <button onclick="loadData()">Actualiser</button>
+        </div>
 
+        <div id="loading">Chargement des données...</div>
+        
+        <div class="stats" id="stats"></div>
+        
+        <div class="charts">
+            <div class="chart-container">
+                <canvas id="glucoseChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="insulinChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/app.js"></script>
+</body>
+</html>
