@@ -1,4 +1,4 @@
-name: Deploy
+name: Secure Deploy
 
 on:
   push:
@@ -7,10 +7,26 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      NIGHTSCOUT_URL: ${{ secrets.NIGHTSCOUT_URL }}
+      API_SECRET: ${{ secrets.API_SECRET }}
     steps:
       - uses: actions/checkout@v4
       
-      - name: Deploy to GitHub Pages
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+      
+      - name: Install dependencies
+        run: |
+          npm install -g crypto-js
+          
+      - name: Build
+        run: |
+          sed -i "s|MM.Misaine2019|$API_SECRET|g" scripts/app.js
+          
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
