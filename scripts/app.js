@@ -21,28 +21,23 @@ async function loadData() {
 }
 
 async function fetchData(endpoint) {
-    const url = document.getElementById('nightscoutUrl').value;
-    const token = document.getElementById('apiToken').value;
-    
-    // Utilisation d'un proxy CORS sécurisé
-    const proxy = "https://cors-anywhere.herokuapp.com/";
-    
+    const API_SECRET = "MM.Misaine2019"; // Votre vrai secret
+    const HASHED_SECRET = CryptoJS.SHA1(API_SECRET).toString();
+    const URL = "https://aurelien.misaine.bizis.si";
+
     try {
-        const response = await fetch(proxy + `${url}/api/v1/${endpoint}`, {
+        const response = await fetch(`${URL}/api/v1/${endpoint}`, {
             headers: {
-                "api-secret": CryptoJS.SHA1(token).toString(), // Hash SHA1 requis
+                "api-secret": HASHED_SECRET,
                 "Accept": "application/json"
             }
         });
 
-        // Gestion des erreurs HTTP
-        if (response.status === 401) throw new Error('Token invalide');
-        if (response.status === 404) throw new Error('Endpoint non trouvé');
-        
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         return response.json();
-        
+
     } catch (error) {
-        showError(`Erreur technique : ${error.message}`);
+        showError(`Erreur API : ${error.message}`);
         throw error;
     }
 }
