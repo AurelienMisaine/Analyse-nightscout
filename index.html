@@ -36,3 +36,13 @@
     <script src="scripts/app.js"></script>
 </body>
 </html>
+<script>
+// Vérification du hash attendu
+const EXPECTED_HASH = "7d5e4e1a7e2c6b0f3d8a9c1b2e4f5a6d7c3b1a0"; // Remplacez par le hash réel de MM.Misaine2019
+const ACTUAL_HASH = CryptoJS.SHA1("MM.Misaine2019").toString();
+
+if(ACTUAL_HASH !== EXPECTED_HASH) {
+    document.body.innerHTML = '<h1 style="color:red">Erreur de configuration critique !</h1>';
+    throw new Error('API Secret incorrect');
+}
+</script>
