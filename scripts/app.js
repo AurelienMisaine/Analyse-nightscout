@@ -23,14 +23,28 @@ async function loadData() {
 async function fetchData(endpoint) {
     const url = document.getElementById('nightscoutUrl').value;
     const token = document.getElementById('apiToken').value;
+    
+    // Utilisation d'un proxy CORS sécurisé
+    const proxy = "https://cors-anywhere.herokuapp.com/";
+    
+    try {
+        const response = await fetch(proxy + `${url}/api/v1/${endpoint}`, {
+            headers: {
+                "api-secret": CryptoJS.SHA1(token).toString(), // Hash SHA1 requis
+                "Accept": "application/json"
+            }
+        });
 
-    const response = await fetch(`${url}/api/v1/${endpoint}&token=${token}`);
-    
-    if (!response.ok) throw new Error('Erreur API');
-    const data = await response.json();
-    
-    if (!data.length) throw new Error('Aucune donnée trouvée');
-    return data;
+        // Gestion des erreurs HTTP
+        if (response.status === 401) throw new Error('Token invalide');
+        if (response.status === 404) throw new Error('Endpoint non trouvé');
+        
+        return response.json();
+        
+    } catch (error) {
+        showError(`Erreur technique : ${error.message}`);
+        throw error;
+    }
 }
 
 function calculateStats(glucoseData) {
@@ -125,6 +139,19 @@ function stdev(values) {
 
 function showLoading(show) {
     document.getElementById('loading').style.display = show ? 'block' : 'none';
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerHTML = `
+        🚨 ERREUR : ${message}<br>
+        Vérifiez :<br>
+        1. Que l'URL est correcte<br>
+        2. Que le token a les permissions "reporter"<br>
+        3. La console pour plus de détails
+    `;
+    document.body.prepend(errorDiv);
 }
 
 // Chargement initial
