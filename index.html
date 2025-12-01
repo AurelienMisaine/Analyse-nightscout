@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Analyse Diabète</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="scripts/styles/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
@@ -12,10 +12,10 @@
         <h1>Analyse Nightscout 🩸</h1>
         
         <div class="config">
-            <input type="text" id="nightscoutUrl" 
-                   value="https://aurelien.misaine.bizis.si" readonly>
-            <input type="password" id="apiToken" 
-                   value="reporter-0554ed1eaf3b1631" readonly>
+            <input type="text" id="nightscoutUrl"
+                   placeholder="https://votre-instance-nightscout">
+            <input type="password" id="apiToken"
+                   placeholder="Votre API secret ou token reporter">
             <button onclick="loadData()">Actualiser</button>
         </div>
 
@@ -36,13 +36,3 @@
     <script src="scripts/app.js"></script>
 </body>
 </html>
-<script>
-// Vérification du hash attendu
-const EXPECTED_HASH = "67262a953b7a15ac6e2fd4a2f11232c96b244fae"; // Remplacez par le hash réel de MM.Misaine2019
-const ACTUAL_HASH = CryptoJS.SHA1("MM.Misaine2019").toString();
-
-if(ACTUAL_HASH !== EXPECTED_HASH) {
-    document.body.innerHTML = '<h1 style="color:red">Erreur de configuration critique !</h1>';
-    throw new Error('API Secret incorrect');
-}
-</script>
